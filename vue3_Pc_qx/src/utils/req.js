@@ -15,6 +15,9 @@ const http = axios.create({
     timeout:5000
 })
 http.interceptors.request.use((cfg)=>{
+    if(localStorage.getItem('token')){
+        cfg.headers.Authorization = localStorage.getItem('token')
+    }
     return cfg
 })
 http.interceptors.response.use((res)=>{

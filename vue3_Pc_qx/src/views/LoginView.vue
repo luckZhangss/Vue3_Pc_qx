@@ -94,7 +94,7 @@ const onFinish = (values: any) => {
           content: "登录成功",
           duration: 2,
           onClose: () => {
-            router.push("/home");
+            router.push("/");
           },
         });
       } else {

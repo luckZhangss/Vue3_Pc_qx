@@ -5,19 +5,21 @@
         <div class="logo" />
         <a-menu v-model:selectedKeys="state.selectedKeys" theme="dark" mode="inline" >
           <!-- 图表统计 -->
-          <a-menu-item key="/admin/chart">
+          <!-- <a-menu-item key="/admin/chart">
             <pie-chart-outlined />
             <span>图标统计</span>
             <router-link to="/admin/chart"></router-link>
-          </a-menu-item>
+          </a-menu-item> -->
+
           <!-- 会员管理 -->
-          <a-menu-item key="/admin/members">
-            <desktop-outlined />
+          <!-- <a-menu-item key="/admin/members">
+            <UserOutlined />
             <router-link to="/admin/members"></router-link>
             <span>会员管理</span>
-          </a-menu-item>
+          </a-menu-item> -->
+
           <!-- ... -->
-          <a-sub-menu key="sub1">
+          <!-- <a-sub-menu key="sub1">
             <template #title>
               <span>
                 <user-outlined />
@@ -27,9 +29,9 @@
             <a-menu-item key="3">Tom</a-menu-item>
             <a-menu-item key="4">Bill</a-menu-item>
             <a-menu-item key="5">Alex</a-menu-item>
-          </a-sub-menu>
+          </a-sub-menu> -->
           <!-- ... -->
-          <a-sub-menu key="sub2">
+          <!-- <a-sub-menu key="sub2">
             <template #title>
               <span>
                 <team-outlined />
@@ -38,12 +40,18 @@
             </template>
             <a-menu-item key="6">Team 1</a-menu-item>
             <a-menu-item key="8">Team 2</a-menu-item>
-          </a-sub-menu>
+          </a-sub-menu> -->
           <!-- 权限管理 -->
-          <a-menu-item key="/admin/permission" v-if="user.data.username === 'vvv'">
-            <file-outlined />
+          <!-- <a-menu-item key="/admin/permission" v-if="data.userInfo.username === 'admin1'">
+            <LockOutlined />
             <span>权限管理</span>
             <router-link to="/admin/permission"></router-link>
+          </a-menu-item> -->
+
+          <a-menu-item :key="item.path" v-for="item in data.userInfo.acl" >
+            <LockOutlined />
+            <span>{{ item.name }}</span>
+            <router-link :to="item.path"></router-link>
           </a-menu-item>
         </a-menu>
       </a-layout-sider>
@@ -59,7 +67,7 @@
             "
           >
             欢迎【
-            <span style="color: red">{{ user.data.username }}</span> 】登录
+            <span style="color: red">{{ data.userInfo.username }}</span> 】登录
             <div
               style="
                 font-size: 14px;
@@ -111,14 +119,13 @@ console.log(globalProxy);
 
 import {
   PieChartOutlined,
-  DesktopOutlined,
   UserOutlined,
-  TeamOutlined,
-  FileOutlined,
+  LockOutlined
 } from "@ant-design/icons-vue";
-import { getCurrentInstance, reactive, ref } from "vue";
+import { getCurrentInstance, onBeforeMount, reactive, ref } from "vue";
 import { useRouter,useRoute } from "vue-router";
 import { message } from "ant-design-vue";
+import url from '../../config/url'
 const collapsed = ref<boolean>(false);
   const router = useRouter();
 const route = useRoute();
@@ -126,13 +133,36 @@ const state = reactive({
   selectedKeys:['/chart']
 })
   
+const data = reactive({
+  userInfo:localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : ''
+})
+
+globalProxy.$http.get(url.Profile).then((res)=>{
+  if(res.data.code === 401){
+    message.error({
+      content:'请登录',
+      duration:2,
+      onClose:()=>{
+        router.push('/login')
+       
+      }
+    })
+  }else{
+    data.userInfo = res.data.data
+  }
+})
 
 
 
-// 获取本地存储用户信息
-let userInfo = localStorage.getItem("userInfo");
-let user = JSON.parse(userInfo);
-console.log(user);
+
+
+
+
+ 
+
+
+
+
 // // 退出登录
 const confirm = (e: MouseEvent) => {
   console.log(e);

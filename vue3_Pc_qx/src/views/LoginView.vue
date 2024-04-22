@@ -89,7 +89,7 @@ const onFinish = (values: any) => {
       console.log(res);
       if (res.data.code === 0) {
         localStorage.setItem("token", res.data.token);
-        localStorage.setItem("userInfo", JSON.stringify(res.data));
+        localStorage.setItem("userInfo", JSON.stringify(res.data.data));
         message.success({
           content: "登录成功",
           duration: 2,

@@ -17,6 +17,8 @@ const url = {
   AdminList: prefix1 + "/users/list",
    //管理员信息
    Profile: prefix1 +'/profile',
+  //获取会员信息 
+   Members :prefix1 + '/members'
 };
 
 export default url;

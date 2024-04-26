@@ -23,33 +23,33 @@ const router = createRouter({
       component: IndexView,
     },
 
-    {
-      path: "/admin",
-      // redirect:'/admin/index',
-      component: () => import("../views/Admin/IndexView.vue"),
+    // {
+    //   path: "/admin",
+    //   // redirect:'/admin/index',
+    //   component: () => import("../views/Admin/IndexView.vue"),
       
-      children: [
-        {
-          path:"index",
-          component: () => import("../views/Admin/IndexView.vue"),
-        },
-        {
-          path:"chart",
-          component: () => import("../views/Admin/ChartView.vue"),
-        },
-        {
-          path:"members",
-          component: () => import("../views/Admin/MembersView.vue"),
-        },
-        {
-          path:"permission",
-          component: () => import("../views/Admin/PermissionView.vue"),
-        },
-      ],
-    },
+    //   children: [
+    //     {
+    //       path:"index",
+    //       component: () => import("../views/Admin/IndexView.vue"),
+    //     },
+    //     {
+    //       path:"chart",
+    //       component: () => import("../views/Admin/ChartView.vue"),
+    //     },
+    //     {
+    //       path:"members",
+    //       component: () => import("../views/Admin/MembersView.vue"),
+    //     },
+    //     {
+    //       path:"permission",
+    //       component: () => import("../views/Admin/PermissionView.vue"),
+    //     },
+    //   ],
+    // },
     {
       path: "/:pathMatch(.*)*",
-      name: "404",
+      name: 'NotFound',
       component: () => import("../views/NotFoundView.vue"),
     },
     // {
@@ -66,33 +66,46 @@ const acl = JSON.parse(localStorage.getItem("userInfo"))
   ? JSON.parse(localStorage.getItem("userInfo")).acl
   : [];
 
-
-//   console.log('2222',acl);
-// // 添加动态路由配置
+console.log('12',acl);
+// //   console.log('2222',acl);
+// // // 添加动态路由配置
 const routerList = [
-  // {
-  //   path: "index",
-  //   component: () => import("../views/Admin/IndexView.vue"),
-  // },
+  
   {
-    path: "/chart",
-    component: () => import("../views/Admin/ChartView.vue"),
-  },
-  {
-    path: "/members",
-    component: () => import("../views/Admin/MembersView.vue"),
-  },
-  {
-    path: "/permission",
-    component: () => import("../views/Admin/PermissionView.vue"),
+    path: "/admin",
+    component: () => import("../views/Admin/IndexView.vue"),
+    children:[
+      {
+       
+       path:'/admin/permission',
+       name:'permission',
+       component: () => import("../views/Admin/PermissionView.vue"),
+      },
+      {
+        path: "/admin/chart",
+        name:'chart',
+        component: () => import("../views/Admin/ChartView.vue"),
+      },
+      {
+        path: "/admin/members",
+        name:'members',
+        component: () => import("../views/Admin/MembersView.vue"),
+      },
+    ]   
   }
 ]
 
 acl.forEach((item) => {
   routerList.forEach((item1) => {
-    if (item.path.replace("/admin", '') === item1.path) {
-      router.addRoute("admin", item1);
-    }
+    item1.children.forEach((item2)=>{
+      if(item.path === item2.path){
+        router.addRoute(item1)
+      }
+    })
+    // if (item.path === item1.path) {
+    //   router.addRoute(item1)
+    
+    // }
   });
 });
 

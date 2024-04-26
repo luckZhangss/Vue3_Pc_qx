@@ -7,7 +7,9 @@ import App from './App.vue'
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';
 
+
 import http from '../src/utils/req'
+
 const app = createApp(App)
 
 app.use(createPinia())

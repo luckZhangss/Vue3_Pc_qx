@@ -24,26 +24,26 @@
 
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'id'">
-        <a>
+        <span>
           {{ record._id }}
-        </a>
+        </span>
       </template>
       <template v-else-if="column.key === 'username'">
-        <a>
+        <span>
           {{ record.username }}
-        </a>
+        </span>
       </template>
       
       <template v-else="column.key === 'edit'">
         <a>
-         <button @click="showModal(record)">编辑</button>
+         <a-button type="primary" size="small"  @click="showModal(record)">编辑</a-button>
         </a>
       </template>
     </template>
   </a-table>
 
     <!-- 点击打开弹出框 -->
-    <a-modal v-model:open="open" :title="`设置【${currentUser.username}】`" @ok="handleOk">
+    <a-modal v-model:open="open" :title="`设置【${currentUser.username}】权限`" @ok="handleOk">
       <a-transfer
         v-model:target-keys="targetKeys"
         v-model:selected-keys="selectedKeys"
@@ -182,15 +182,19 @@ console.log('999',data);
     }
   })
 };
-interface data {
+interface data2 {
   key: string;
   title: string;
   description: string;
   chosen: boolean;
 }
 
-const filterOption = (inputValue: string, option: data) => {
-  return option.description.indexOf(inputValue) > -1;
+// 搜索功能
+const filterOption = (inputValue: string, option: data2) => {
+  // return option.description.indexOf(inputValue) > -1;
+  if(option.title.includes(inputValue)){
+    return option
+  }
 };
 const handleChange = (
   keys: string[],
